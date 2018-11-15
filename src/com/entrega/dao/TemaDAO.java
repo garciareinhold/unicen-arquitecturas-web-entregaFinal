@@ -7,8 +7,7 @@ import javax.persistence.Query;
 
 import com.entrega.controllers.EMF;
 import com.entrega.entidades.Tema;
-import com.entrega.entidades.Trabajo;
-import com.entrega.entidades.Usuario;
+
 
 public class TemaDAO implements DAO<Tema, Integer> {
 	private static TemaDAO daoTema;
@@ -19,13 +18,16 @@ public class TemaDAO implements DAO<Tema, Integer> {
 	public static TemaDAO getInstance() {
 		if (daoTema == null) {
 			daoTema = new TemaDAO();
+			;
 		}
+
 		return daoTema;
 	}
 
 	@Override
 	public Tema persist(Tema tema ) {
 		EntityManager entityManager= EMF.createEntityManager();
+
 		entityManager.getTransaction().begin();
 		entityManager.persist(tema);
 		entityManager.getTransaction().commit();

@@ -12,7 +12,7 @@ public class Tema {
 	@Column(nullable = false)
 	private String name;
 	@Column(nullable = false)
-	private boolean esGeneral;
+	private boolean temaGeneral;
 
 	
 	public Tema() {}
@@ -25,13 +25,15 @@ public class Tema {
 	}
 
 	public boolean isTemaGeneral() {
-		return esGeneral;
+		return temaGeneral;
 	}
 	public void setEsGeneral(boolean temaGeneral) {
-		this.esGeneral = temaGeneral;
+		this.temaGeneral = temaGeneral;
 	}
 	public int getId() {
 		return this.id;
 	}
-
+	public void setId(int id) {
+		this.id=id;
+	}
 }

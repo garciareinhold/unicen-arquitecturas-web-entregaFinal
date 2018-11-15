@@ -14,12 +14,15 @@ public class Revision {
 	@Id
 	@GeneratedValue
 	int id;
-	@ManyToOne(cascade= CascadeType.ALL)
+	
+	@ManyToOne(cascade = CascadeType.MERGE)
 	Usuario evaluador;
-	@ManyToOne(cascade= CascadeType.ALL)
+	
+	@ManyToOne(cascade = CascadeType.MERGE)
 	Trabajo trabajo;
-	@Column(nullable = false)
-	Calendar fechaRevision;
+	
+//	@Column(nullable = false)
+//	Calendar fechaRevision;
 	public Revision() {};
 	public Usuario getEvaluador() {
 		return evaluador;
@@ -33,17 +36,13 @@ public class Revision {
 	public void setTrabajo(Trabajo trabajo) {
 		this.trabajo = trabajo;
 	}
-	public Calendar getFechaRevision() {
-		return fechaRevision;
-	}
-	public void setFechaRevision(Calendar fechaRevision) {
-		this.fechaRevision = fechaRevision;
-	}
-	@Override
-	public String toString() {
-		return "Revision [id=" + id + ", evaluador=" + evaluador + ", trabajo=" + trabajo + ", fechaRevision="
-				+ fechaRevision + "]";
-	}
+//	public Calendar getFechaRevision() {
+//		return fechaRevision;
+//	}
+//	public void setFechaRevision(Calendar fechaRevision) {
+//		this.fechaRevision = fechaRevision;
+//	}
+
 	public int getId() {
 		return id;
 	}

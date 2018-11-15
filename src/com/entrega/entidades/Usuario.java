@@ -19,42 +19,50 @@ import javax.persistence.Table;
 // @Table(name="TABLA_Usuarios")
 public class Usuario {
 	@Id
-	int dni;
+	int dni
+	;
 	@Column(nullable = false)
 	String nombre;
+	
 	@Column(nullable = false)
 	String apellido;
+	
 	@Column(nullable = false)
 	String lugarDeTrabajo;
-	@OneToMany(mappedBy = "evaluador")
-	List<Revision> revision;
-	@ManyToMany(cascade = CascadeType.ALL)
-	List<Trabajo> trabajos;
-	@Column(nullable = false)
-	boolean esExperto;
+	
 	@Column(nullable = true)
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "evaluador")
+	List<Revision> review;
+	
+	@ManyToMany(mappedBy = "autores",cascade = CascadeType.MERGE)
+	List<Trabajo> trabajos;
+	
+	@Column(nullable = false)
+	boolean expert;
+	
+	@Column(nullable = true)
+	@OneToMany(cascade = CascadeType.MERGE)
 	List<Tema> temasConocimiento;
 
 	public Usuario() {
-		this.revision = new ArrayList<Revision>();
+		this.review = new ArrayList<Revision>();
 		this.trabajos = new ArrayList<Trabajo>();
 		this.temasConocimiento = new ArrayList<Tema>();
-		this.esExperto = false;
+		this.expert = false;
 	}
 
-	public Usuario(String nombre, String apellido, int dni, boolean esExperto, boolean esEvaluador,
+	public Usuario(String nombre, String apellido, int dni, boolean esEvaluador,
 			String lugarDeTrabajo) {
 		super();
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.lugarDeTrabajo = lugarDeTrabajo;
-		this.esExperto = false;
+		this.expert = false;
 	}
 
 	public boolean esExperto() {
-		return this.esExperto;
+		return this.expert;
 	}
 
 	public int getDni() {
@@ -90,7 +98,7 @@ public class Usuario {
 	}
 
 	public void addRevision(Revision review) {
-		this.revision.add(review);
+		this.review.add(review);
 	}
 
 	public void addTrabajos(Trabajo work) {
@@ -103,8 +111,8 @@ public class Usuario {
 
 	public void addTemasConocimiento(Tema tema) {
 		this.temasConocimiento.add(tema);
-		if (this.esExperto == false && tema.isTemaGeneral() == false) {
-			this.esExperto = true;
+		if (this.expert == false && tema.isTemaGeneral() == false) {
+			this.expert = true;
 		}
 	}
 
@@ -114,7 +122,7 @@ public class Usuario {
 	 * @return
 	 */
 	public boolean hayCupoTrabajo() {
-		return (this.revision.size() < 3);
+		return (this.review.size() < 3);
 	}
 
 	public List<Trabajo> getTrabajos() {

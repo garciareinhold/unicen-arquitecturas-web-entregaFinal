@@ -13,28 +13,30 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 
 public  class Trabajo {
 	@Id
 	@GeneratedValue
-	int id;
+	private int id;
 	@Column(nullable = true)
-	@OneToMany(cascade= CascadeType.ALL)
-	List<Tema> temasConocimiento;
+	@OneToMany(cascade= CascadeType.MERGE)
+	protected List<Tema> temasConocimiento;
 	@Column(nullable = false)
-	String nombre;
-	@ManyToMany(mappedBy = "trabajos")
+	private String nombre;
+	@ManyToMany(cascade = CascadeType.MERGE)
 	@Column(nullable = true)
-	List<Usuario> autores;
+	private List<Usuario> autores;
 	@OneToMany(mappedBy = "trabajo")
 	@Column(nullable = true)
-	List<Revision> revisiones;
+	private List<Revision> revisiones;
 
 	public Trabajo() {
+		this.temasConocimiento= new ArrayList<Tema>();
 		this.autores = new ArrayList<Usuario>();
 		this.revisiones = new ArrayList<Revision>();
-		this.temasConocimiento= new ArrayList<Tema>();
 	}
 
 	/**
@@ -89,10 +91,6 @@ public  class Trabajo {
 		return (this.revisiones.size()<3);
 	}
 
-	@Override
-	public String toString() {
-		return "Trabajo [id=" + id + ", nombre=" + nombre + ", autores=" + autores + ", revisiones=" + revisiones + "]";
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -110,10 +108,12 @@ public  class Trabajo {
 
 		return this.temasConocimiento;
 	}
+	public List<Usuario> getAutores() {
 
+		return this.autores;
+	}
 	public void addAutor(Usuario autor) {
 		autores.add(autor);
-
 	}
 
 	public void addReview(Revision review) {
