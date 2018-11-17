@@ -9,6 +9,7 @@ import com.entrega.controllers.EMF;
 import com.entrega.entidades.Tema;
 
 
+
 public class TemaDAO implements DAO<Tema, Integer> {
 	private static TemaDAO daoTema;
 
@@ -45,6 +46,7 @@ public class TemaDAO implements DAO<Tema, Integer> {
 		query.setParameter("name", nombre);
 		entityManager.getTransaction().commit();
 		retorno =(Tema)query.getSingleResult();
+		entityManager.close();
 		return retorno;
 	}
 
@@ -56,8 +58,9 @@ public class TemaDAO implements DAO<Tema, Integer> {
 
 	@Override
 	public Tema findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager= EMF.createEntityManager();
+		Tema tema = entityManager.find(Tema.class, id);
+		return tema;
 	}
 
 	@Override

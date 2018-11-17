@@ -34,6 +34,7 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 	public Usuario findById(Integer id) {
 		EntityManager entityManager= EMF.createEntityManager();
 		Usuario user = entityManager.find(Usuario.class, id);
+
 		return user;
 	}
 

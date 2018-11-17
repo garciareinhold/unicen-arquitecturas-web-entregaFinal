@@ -1,19 +1,22 @@
 package com.entrega.entidades;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity
 
@@ -26,9 +29,17 @@ public  class Trabajo {
 	protected List<Tema> temasConocimiento;
 	@Column(nullable = false)
 	private String nombre;
+	
+//	@ManyToMany(fetch=FetchType.LAZY)
+//	@JoinTable(name = "trabajo_usuario",
+//	joinColumns = { @JoinColumn(name = "trabajos_id") },
+//	inverseJoinColumns = { @JoinColumn(name = "autores_dni") })
 	@ManyToMany(cascade = CascadeType.MERGE)
+	@JoinTable(name="trabajo_usuario", joinColumns={@JoinColumn(name="trabajos_id")},
+	inverseJoinColumns={@JoinColumn(name="autores_dni")})
 	@Column(nullable = true)
 	private List<Usuario> autores;
+	
 	@OneToMany(mappedBy = "trabajo")
 	@Column(nullable = true)
 	private List<Revision> revisiones;
@@ -122,6 +133,51 @@ public  class Trabajo {
 
 	public int getId() {
 		return this.id;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((autores == null) ? 0 : autores.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result + ((revisiones == null) ? 0 : revisiones.hashCode());
+		result = prime * result + ((temasConocimiento == null) ? 0 : temasConocimiento.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Trabajo other = (Trabajo) obj;
+		if (autores == null) {
+			if (other.autores != null)
+				return false;
+		} else if (!autores.equals(other.autores))
+			return false;
+		if (id != other.id)
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		if (revisiones == null) {
+			if (other.revisiones != null)
+				return false;
+		} else if (!revisiones.equals(other.revisiones))
+			return false;
+		if (temasConocimiento == null) {
+			if (other.temasConocimiento != null)
+				return false;
+		} else if (!temasConocimiento.equals(other.temasConocimiento))
+			return false;
+		return true;
 	}
 
 }

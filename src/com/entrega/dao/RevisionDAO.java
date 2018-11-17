@@ -24,7 +24,7 @@ public class RevisionDAO implements DAO<Revision, Integer> {
 	public Revision findById(Integer id) {
 		EntityManager entityManager= EMF.createEntityManager();
 		Revision review = entityManager.find(Revision.class, id);
-		entityManager.close();
+
 		return review;
 
 	}

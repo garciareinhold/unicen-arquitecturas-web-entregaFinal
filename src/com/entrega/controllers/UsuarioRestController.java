@@ -32,12 +32,12 @@ public class UsuarioRestController {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Usuario getPerroById(@PathParam("id") String msg) {
+	public Usuario getUsuarioById(@PathParam("id") String msg) {
 		int id = Integer.valueOf(msg);
 		Usuario user = UsuarioDAO.getInstance().findById(id);
-		if(user!=null)
+		if(user!=null) {
 			return user;
-		else
+		}else
 			throw new RecursoNoExiste(id);
 	}
 	public class RecursoDuplicado extends WebApplicationException {

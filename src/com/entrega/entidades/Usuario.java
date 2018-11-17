@@ -1,22 +1,21 @@
 package com.entrega.entidades;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
 
 @Entity
-// @Table(name="TABLA_Usuarios")
 public class Usuario {
 	@Id
 	int dni
@@ -34,7 +33,8 @@ public class Usuario {
 	@OneToMany(mappedBy = "evaluador")
 	List<Revision> review;
 	
-	@ManyToMany(mappedBy = "autores",cascade = CascadeType.MERGE)
+	@Column(nullable = true)
+	@ManyToMany(mappedBy = "autores")
 	List<Trabajo> trabajos;
 	
 	@Column(nullable = false)
@@ -59,6 +59,67 @@ public class Usuario {
 		this.dni = dni;
 		this.lugarDeTrabajo = lugarDeTrabajo;
 		this.expert = false;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((apellido == null) ? 0 : apellido.hashCode());
+		result = prime * result + dni;
+		result = prime * result + (expert ? 1231 : 1237);
+		result = prime * result + ((lugarDeTrabajo == null) ? 0 : lugarDeTrabajo.hashCode());
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result + ((review == null) ? 0 : review.hashCode());
+		result = prime * result + ((temasConocimiento == null) ? 0 : temasConocimiento.hashCode());
+		result = prime * result + ((trabajos == null) ? 0 : trabajos.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		if (apellido == null) {
+			if (other.apellido != null)
+				return false;
+		} else if (!apellido.equals(other.apellido))
+			return false;
+		if (dni != other.dni)
+			return false;
+		if (expert != other.expert)
+			return false;
+		if (lugarDeTrabajo == null) {
+			if (other.lugarDeTrabajo != null)
+				return false;
+		} else if (!lugarDeTrabajo.equals(other.lugarDeTrabajo))
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		if (review == null) {
+			if (other.review != null)
+				return false;
+		} else if (!review.equals(other.review))
+			return false;
+		if (temasConocimiento == null) {
+			if (other.temasConocimiento != null)
+				return false;
+		} else if (!temasConocimiento.equals(other.temasConocimiento))
+			return false;
+		if (trabajos == null) {
+			if (other.trabajos != null)
+				return false;
+		} else if (!trabajos.equals(other.trabajos))
+			return false;
+		return true;
 	}
 
 	public boolean esExperto() {
