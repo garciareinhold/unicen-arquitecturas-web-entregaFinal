@@ -1,5 +1,6 @@
 package com.entrega.controllers;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -9,12 +10,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
 import com.entrega.dao.UsuarioDAO;
+import com.entrega.entidades.Revision;
 import com.entrega.entidades.Trabajo;
 import com.entrega.entidades.Usuario;
 
@@ -85,4 +88,24 @@ public class UsuarioRestController {
 					.entity("El recurso con id "+id+" no fue encontrado").type(MediaType.TEXT_PLAIN).build());
 		}
 	}
+	
+	
+//	@GET
+//	@Path("/findRevisiones")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<Revision> findPerrosByEdad(@QueryParam("id") String msg, @QueryParam("from") Calendar from,
+//			@QueryParam("to") Calendar to) {
+//		int id = Integer.valueOf(msg);
+//		Calendar dateFrom  = from;
+//		Calendar dateTo  = to;
+//
+//		List<Revision>revisiones = UsuarioDAO.getInstance().findRevisiones(id, dateFrom, dateTo);
+//		if(revisiones!=null) {
+//			System.out.println(revisiones);
+//			return revisiones;
+//			
+//		}else
+//			throw new RecursoNoExiste(id);
+//	}
+
 }

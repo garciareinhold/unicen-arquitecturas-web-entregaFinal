@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
 
@@ -171,17 +173,17 @@ public class TestRestInterfaceTrabajo {
 		Usuario user=mapper.readValue(resultContent3, Usuario.class);
 		Trabajo work=mapper.readValue(resultContent1, Trabajo.class);
 		boolean aceptReview=work.aceptaRevision(user);
-//		System.out.println(user.getTemasConocimiento());
-//		System.out.println(work.getTemasConocimiento());
+
 		if(aceptReview) {
 			String url = BASE_URL + "/revision";
 
 			ObjectNode jsonObject = mapper.createObjectNode();
-//			jsonObject.putPOJO("evaluador", resultContent3);
-//			jsonObject.putPOJO("trabajo", resultContent1);
+
 			Revision review=new Revision();
 			review.setEvaluador(user);
 			review.setTrabajo(work);
+			Calendar fechaRevision= new GregorianCalendar(2011, 0, 31);
+			review.setFechaRevision(fechaRevision);
 			
 			String jsonString = mapper.writeValueAsString(review);
 			HttpPost post = new HttpPost(url);
@@ -301,6 +303,24 @@ public class TestRestInterfaceTrabajo {
 		System.out.println("Response Content : " + resultContent);
 
 	}
+	
+//private void getRevisionesPorFecha() throws ClientProtocolException, IOException {
+//		
+//		String url = BASE_URL + "/usuario/findRevisiones?from=&to=";
+//
+//		HttpGet request = new HttpGet(url);
+//
+//		HttpResponse response = client.execute(request);
+//
+//		System.out.println("\nGET "+url);
+//		
+//		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+//
+//		String resultContent = getResultContent(response);
+//
+//		System.out.println("Response Content : " + resultContent);
+//		
+//	}
 
 	//	public void updatePerro() throws ClientProtocolException, IOException {
 	//

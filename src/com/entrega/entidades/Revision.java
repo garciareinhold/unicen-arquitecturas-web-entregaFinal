@@ -30,8 +30,8 @@ public class Revision {
 	@JsonIgnoreProperties(value= {"revisiones","autores"}, allowSetters=true)
 	Trabajo trabajo;
 	
-//	@Column(nullable = false)
-//	Calendar fechaRevision;
+	@Column(nullable = true)
+	Calendar fechaRevision;
 	
 	public Revision() {};
 	public Usuario getEvaluador() {
@@ -46,12 +46,12 @@ public class Revision {
 	public void setTrabajo(Trabajo trabajo) {
 		this.trabajo = trabajo;
 	}
-//	public Calendar getFechaRevision() {
-//		return fechaRevision;
-//	}
-//	public void setFechaRevision(Calendar fechaRevision) {
-//		this.fechaRevision = fechaRevision;
-//	}
+	public Calendar getFechaRevision() {
+		return fechaRevision;
+	}
+	public void setFechaRevision(Calendar fechaRevision) {
+		this.fechaRevision = fechaRevision;
+	}
 
 	public int getId() {
 		return id;
