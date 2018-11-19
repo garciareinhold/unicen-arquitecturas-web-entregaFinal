@@ -90,6 +90,20 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 
 		return trabajos;
 	}
+	public List<Trabajo> findTrabajosByUser(Integer id ) {
+		EntityManager entityManager= EMF.createEntityManager();
+		entityManager.getTransaction().begin();
+		Query query = entityManager.createNativeQuery(
+				"SELECT t.* FROM trabajo_usuario u JOIN trabajo t ON (u.trabajos_id=t.id) WHERE u.autores_dni=:id",
+				Trabajo.class);
+		String jpql="SELECT t FROM trabajo_usuario u JOIN trabajo t ON u.trabajos_id=t.id WHERE u.autores_dni=:id";
+		query.setParameter("id", id);
+		entityManager.getTransaction().commit();
+		List<Trabajo> trabajos = query.getResultList();
+		System.out.println("entre "+trabajos);
+		entityManager.close();
+		return trabajos;
+	}
 
 	public List<Revision> findRevisiones(Integer id, Calendar desde, Calendar hasta) {
 		EntityManager entityManager= EMF.createEntityManager();

@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.PrimaryKeyJoinColumns;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 
@@ -38,6 +40,7 @@ public class Usuario {
 	
 	@Column(nullable = true)
 	@OneToMany(mappedBy = "evaluador")
+	@JsonIgnoreProperties(value= "evaluador", allowSetters=true)
 	List<Revision> review;
 	
 	@Column(nullable = true)

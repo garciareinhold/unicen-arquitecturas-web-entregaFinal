@@ -1,5 +1,7 @@
 package com.entrega.controllers;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 
 import com.entrega.dao.UsuarioDAO;
+import com.entrega.entidades.Trabajo;
 import com.entrega.entidades.Usuario;
 
 @Path("/usuario")
@@ -37,6 +40,19 @@ public class UsuarioRestController {
 		Usuario user = UsuarioDAO.getInstance().findById(id);
 		if(user!=null) {
 			return user;
+		}else
+			throw new RecursoNoExiste(id);
+	}
+	@GET
+	@Path("/trabajo/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Trabajo> getTrabajosByUsuario(@PathParam("id") String msg) {
+		int id = Integer.valueOf(msg);
+		List<Trabajo>trabajos = UsuarioDAO.getInstance().findTrabajosByUser(id);
+		if(trabajos!=null) {
+			System.out.println(trabajos);
+			return trabajos;
+			
 		}else
 			throw new RecursoNoExiste(id);
 	}

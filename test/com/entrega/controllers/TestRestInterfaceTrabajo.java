@@ -1,5 +1,8 @@
 package com.entrega.controllers;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,6 +60,8 @@ public class TestRestInterfaceTrabajo {
 		getTrabajo();
 		listarTrabajos();
 		crearRevsiones(1,1);
+		comprobarUsuarioyTrabajoReview(1,1);
+		findTrabajosByUsuario(1);
 //		crearRevsiones(2,5);
 //		crearRevsiones(3,6);
 	}
@@ -162,17 +167,22 @@ public class TestRestInterfaceTrabajo {
 		HttpGet request3 = new HttpGet(userUrl);
 		HttpResponse response3 = client.execute(request3);
 		String resultContent3 = getResultContent(response3);
-//		Usuario user=mapper.readValue(resultContent3, Usuario.class);
-//		Trabajo work=mapper.readValue(resultContent1, Trabajo.class);
-//		boolean aceptReview=work.aceptaRevision(user);
-//		if(aceptReview) {
+		Usuario user=mapper.readValue(resultContent3, Usuario.class);
+		Trabajo work=mapper.readValue(resultContent1, Trabajo.class);
+		boolean aceptReview=work.aceptaRevision(user);
+//		System.out.println(user.getTemasConocimiento());
+//		System.out.println(work.getTemasConocimiento());
+		if(aceptReview) {
 			String url = BASE_URL + "/revision";
 
 			ObjectNode jsonObject = mapper.createObjectNode();
-			jsonObject.putPOJO("evaluador", resultContent3);
-			jsonObject.putPOJO("trabajo", resultContent1);
-
-			String jsonString = jsonObject.toString();
+//			jsonObject.putPOJO("evaluador", resultContent3);
+//			jsonObject.putPOJO("trabajo", resultContent1);
+			Revision review=new Revision();
+			review.setEvaluador(user);
+			review.setTrabajo(work);
+			
+			String jsonString = mapper.writeValueAsString(review);
 			HttpPost post = new HttpPost(url);
 			post.setEntity(new StringEntity(jsonString, ContentType.APPLICATION_JSON));
 			HttpResponse response = client.execute(post);
@@ -181,11 +191,19 @@ public class TestRestInterfaceTrabajo {
 			System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 			String resultContent = getResultContent(response);
 			System.out.println("Response Content : " + resultContent);
-//		}else {
-//			System.out.println("No Acepta Revision");
-//		}
+		}else {
+			System.out.println("No Acepta Revision");
+		}
 	}
-
+	public void findTrabajosByUsuario(int id)  throws ClientProtocolException, IOException {
+		String url = BASE_URL +"usuario/trabajo/"+id;
+		HttpGet request = new HttpGet(url);
+		HttpResponse response = client.execute(request);
+		String resultContent = getResultContent(response);
+		System.out.println("entre");
+		System.out.println(resultContent);
+		
+	}
 	private String getResultContent(HttpResponse response) throws IOException {
 		HttpEntity entity = response.getEntity();
 		if(entity!=null) {
@@ -201,7 +219,23 @@ public class TestRestInterfaceTrabajo {
 		}
 	}
 
+	public void comprobarUsuarioyTrabajoReview(int usuario,int trabajo) throws ClientProtocolException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		String trabajo1Url= BASE_URL + "/trabajos/"+trabajo;
+		HttpGet request = new HttpGet(trabajo1Url);
+		HttpResponse response1 = client.execute(request);
+		String resultContent1 = getResultContent(response1);
 
+		String userUrl= BASE_URL + "/usuario/"+usuario;
+		HttpGet request3 = new HttpGet(userUrl);
+		HttpResponse response3 = client.execute(request3);
+		String resultContent3 = getResultContent(response3);
+		Usuario user=mapper.readValue(resultContent3, Usuario.class);
+		Trabajo work=mapper.readValue(resultContent1, Trabajo.class);
+		assertTrue(user.getReview().size()!=0);
+		assertTrue(work.getRevisiones().size()!=0);
+		System.out.println("hice los assert");
+	}
 	public void getTrabajo() throws ClientProtocolException, IOException {
 
 		String url = BASE_URL + "/trabajos/1";

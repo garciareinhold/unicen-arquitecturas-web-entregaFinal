@@ -55,6 +55,7 @@ public  class Trabajo {
 	
 	@OneToMany(mappedBy = "trabajo")
 	@Column(nullable = true)
+	@JsonIgnoreProperties(value= "trabajo", allowSetters=true)
 	private List<Revision> revisiones;
 
 	public Trabajo() {
@@ -96,7 +97,7 @@ public  class Trabajo {
 				&& (this.hayCupoRevision() && (evaluador.hayCupoTrabajo()))) {
 
 			for (int i = 0; i < temasEvaluador.size(); i++) {
-				if (!this.temasConocimiento.contains(temasEvaluador.get(i).getName()))
+				if (!this.temasConocimiento.contains(temasEvaluador.get(i)))
 					retorno = false;
 			}
 

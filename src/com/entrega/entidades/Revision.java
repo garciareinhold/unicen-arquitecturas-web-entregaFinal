@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class Revision {
 	@Id
@@ -20,10 +22,12 @@ public class Revision {
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="evaludor_dni")
+	@JsonIgnoreProperties(value= {"review","trabajos"}, allowSetters=true)
 	Usuario evaluador;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="trabajo_id")
+	@JsonIgnoreProperties(value= {"revisiones","autores"}, allowSetters=true)
 	Trabajo trabajo;
 	
 //	@Column(nullable = false)
