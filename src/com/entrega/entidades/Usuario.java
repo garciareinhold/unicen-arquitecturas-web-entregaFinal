@@ -6,19 +6,26 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.PrimaryKeyJoinColumns;
+
+
 
 
 @Entity
 public class Usuario {
 	@Id
-	int dni
+	int id
 	;
 	@Column(nullable = false)
 	String nombre;
@@ -41,7 +48,9 @@ public class Usuario {
 	boolean expert;
 	
 	@Column(nullable = true)
-	@OneToMany(cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = CascadeType.MERGE)
+	@PrimaryKeyJoinColumns({@PrimaryKeyJoinColumn(name="usuario_id",referencedColumnName="id"), 
+	@PrimaryKeyJoinColumn(name="temasConocimiento_idTema",referencedColumnName="idTema") 	})
 	List<Tema> temasConocimiento;
 
 	public Usuario() {
@@ -56,17 +65,41 @@ public class Usuario {
 		super();
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.dni = dni;
+		this.id = dni;
 		this.lugarDeTrabajo = lugarDeTrabajo;
 		this.expert = false;
 	}
 	
+	public List<Revision> getReview() {
+		return review;
+	}
+
+	public void setReview(List<Revision> review) {
+		this.review = review;
+	}
+
+	public boolean isExpert() {
+		return expert;
+	}
+
+	public void setExpert(boolean expert) {
+		this.expert = expert;
+	}
+
+	public void setTrabajos(List<Trabajo> trabajos) {
+		this.trabajos = trabajos;
+	}
+
+	public void setTemasConocimiento(List<Tema> temasConocimiento) {
+		this.temasConocimiento = temasConocimiento;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((apellido == null) ? 0 : apellido.hashCode());
-		result = prime * result + dni;
+		result = prime * result + id;
 		result = prime * result + (expert ? 1231 : 1237);
 		result = prime * result + ((lugarDeTrabajo == null) ? 0 : lugarDeTrabajo.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
@@ -90,7 +123,7 @@ public class Usuario {
 				return false;
 		} else if (!apellido.equals(other.apellido))
 			return false;
-		if (dni != other.dni)
+		if (id != other.id)
 			return false;
 		if (expert != other.expert)
 			return false;
@@ -126,12 +159,12 @@ public class Usuario {
 		return this.expert;
 	}
 
-	public int getDni() {
-		return dni;
+	public int getId() {
+		return id;
 	}
 
-	public void setDni(int dni) {
-		this.dni = dni;
+	public void setId(int dni) {
+		this.id = dni;
 	}
 
 	public String getNombre() {

@@ -24,7 +24,7 @@ public class TemaRestController {
 
 		Tema result= TemaDAO.getInstance().persist(tema);
 		if(result==null) {
-			throw new RecursoDuplicado(tema.getId());
+			throw new RecursoDuplicado(tema.getIdTema());
 		}else {
 			return Response.status(201).entity(tema).build();
 		}

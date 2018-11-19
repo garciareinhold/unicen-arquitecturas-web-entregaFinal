@@ -24,7 +24,7 @@ public class UsuarioRestController {
 	public Response createUsuario(Usuario user) {
 		Usuario result= UsuarioDAO.getInstance().persist(user);
 		if(result==null) {
-			throw new RecursoDuplicado(user.getDni());
+			throw new RecursoDuplicado(user.getId());
 		}else {
 			return Response.status(201).entity(user).build();
 		}

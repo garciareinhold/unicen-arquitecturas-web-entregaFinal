@@ -1,19 +1,32 @@
 package com.entrega.entidades;
 
+
+
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+
+
+
+
 @Entity
+
 public class Tema {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int idTema;
 	@Column(nullable = false)
 	private String name;
 	@Column(nullable = false)
 	private boolean temaGeneral;
-
 	
 	public Tema() {}
 	
@@ -64,10 +77,19 @@ public class Tema {
 	public void setEsGeneral(boolean temaGeneral) {
 		this.temaGeneral = temaGeneral;
 	}
-	public int getId() {
-		return this.idTema;
+	
+	public int getIdTema() {
+		return idTema;
 	}
-	public void setId(int id) {
-		this.idTema=id;
+
+
+	public void setIdTema(int idTema) {
+		this.idTema = idTema;
 	}
+
+
+	public void setTemaGeneral(boolean temaGeneral) {
+		this.temaGeneral = temaGeneral;
+	}
+	
 }

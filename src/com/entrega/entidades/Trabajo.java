@@ -6,15 +6,24 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.PrimaryKeyJoinColumns;
+import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 
@@ -22,11 +31,14 @@ import javax.persistence.OneToMany;
 
 public  class Trabajo {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(nullable = true)
-	@OneToMany(cascade= CascadeType.MERGE)
+	@ManyToMany(cascade= CascadeType.MERGE)
+	@PrimaryKeyJoinColumns({@PrimaryKeyJoinColumn(name="Trabajo_id",referencedColumnName="id"), 
+	@PrimaryKeyJoinColumn(name="temasConocimiento_idTema",referencedColumnName="idTema") 	})
 	protected List<Tema> temasConocimiento;
+	
 	@Column(nullable = false)
 	private String nombre;
 	
@@ -38,6 +50,7 @@ public  class Trabajo {
 	@JoinTable(name="trabajo_usuario", joinColumns={@JoinColumn(name="trabajos_id")},
 	inverseJoinColumns={@JoinColumn(name="autores_dni")})
 	@Column(nullable = true)
+	@JsonIgnoreProperties(value= {"trabajos"}, allowSetters=true)
 	private List<Usuario> autores;
 	
 	@OneToMany(mappedBy = "trabajo")
@@ -180,4 +193,24 @@ public  class Trabajo {
 		return true;
 	}
 
+	public List<Revision> getRevisiones() {
+		return revisiones;
+	}
+
+	public void setRevisiones(List<Revision> revisiones) {
+		this.revisiones = revisiones;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setTemasConocimiento(List<Tema> temasConocimiento) {
+		this.temasConocimiento = temasConocimiento;
+	}
+
+	public void setAutores(List<Usuario> autores) {
+		this.autores = autores;
+	}
+	
 }

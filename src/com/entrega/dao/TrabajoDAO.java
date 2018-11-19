@@ -1,17 +1,16 @@
 package com.entrega.dao;
 
-import java.util.Collection;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
 import javax.persistence.Query;
 
 import com.entrega.controllers.EMF;
-import com.entrega.entidades.Revision;
+
 import com.entrega.entidades.Trabajo;
-import com.entrega.entidades.Usuario;
+
 
 public class TrabajoDAO implements DAO<Trabajo, Integer> {
 
@@ -60,7 +59,7 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 		Query query = entityManager.createNativeQuery("SELECT * FROM trabajo", Trabajo.class);
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
-		entityManager.close();
+//		entityManager.close();
 		return trabajos;
 	}
 

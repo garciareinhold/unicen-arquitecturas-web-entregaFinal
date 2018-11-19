@@ -30,6 +30,8 @@ public class TemaDAO implements DAO<Tema, Integer> {
 		EntityManager entityManager= EMF.createEntityManager();
 
 		entityManager.getTransaction().begin();
+//		entityManager.createNativeQuery("ALTER TABLE trabajo_tema DROP PRIMARY KEY, ADD PRIMARY KEY(temasConocimiento_idTema,id);").executeUpdate();
+//		entityManager.createNativeQuery("ALTER TABLE usuario_tema DROP PRIMARY KEY, ADD PRIMARY KEY(temasConocimiento_idTema,id);").executeUpdate();
 		entityManager.persist(tema);
 		entityManager.getTransaction().commit();
 		entityManager.close();

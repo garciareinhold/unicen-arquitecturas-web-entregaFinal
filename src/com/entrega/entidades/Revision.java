@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,7 +15,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Revision {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
@@ -81,6 +82,9 @@ public class Revision {
 		} else if (!trabajo.equals(other.trabajo))
 			return false;
 		return true;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }
