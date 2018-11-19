@@ -196,7 +196,7 @@ public class TestRestInterfaceTrabajo {
 		}
 	}
 	public void findTrabajosByUsuario(int id)  throws ClientProtocolException, IOException {
-		String url = BASE_URL +"usuario/trabajo/"+id;
+		String url = BASE_URL +"/usuario/trabajo/"+id;
 		HttpGet request = new HttpGet(url);
 		HttpResponse response = client.execute(request);
 		String resultContent = getResultContent(response);

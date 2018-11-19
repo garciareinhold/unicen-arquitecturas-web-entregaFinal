@@ -101,7 +101,6 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
 		System.out.println("entre "+trabajos);
-		entityManager.close();
 		return trabajos;
 	}
 

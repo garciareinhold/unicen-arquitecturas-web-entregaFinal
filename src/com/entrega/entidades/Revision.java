@@ -32,6 +32,7 @@ public class Revision {
 	
 //	@Column(nullable = false)
 //	Calendar fechaRevision;
+	
 	public Revision() {};
 	public Usuario getEvaluador() {
 		return evaluador;
