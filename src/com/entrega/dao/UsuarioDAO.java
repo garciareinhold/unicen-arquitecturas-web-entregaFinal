@@ -136,10 +136,24 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 		return null;
 	}
 
-	@Override
-	public Usuario update(Integer id, Usuario newEntityValues) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public Usuario update(Integer id, Usuario entity) {
+			EntityManager entityManager = EMF.createEntityManager();
+			Usuario entityAux = entityManager.find(Usuario.class, id);
+			if (entityAux == null) {
+				entityManager.close();
+				return null;
+			} else {
+				entityManager.getTransaction().begin();			
+				entityAux.setNombre(entity.getNombre());
+				entityAux.setExpert(entity.esExperto());
+				entityAux.setApellido(entity.getApellido());
+				entityAux.setLugarDeTrabajo(entity.getLugarDeTrabajo());
+				entityManager.getTransaction().commit();
+				entityManager.close();
+				return entityAux;
+			}
+		}	
+	
 
 }

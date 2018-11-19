@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -43,6 +44,21 @@ public class UsuarioRestController {
 		}else
 			throw new RecursoNoExiste(id);
 	}
+	
+	@PUT
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateUsuario(@PathParam("id") int id,Usuario usuario) {
+		Usuario result= UsuarioDAO.getInstance().update(id, usuario);
+		if(result==null) {
+			throw new RecursoNoExiste(id);
+		}else {
+			return Response.status(200).entity(usuario).build();
+		}
+	}
+	
+	
 	@GET
 	@Path("/trabajo/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

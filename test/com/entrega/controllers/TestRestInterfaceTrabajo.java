@@ -62,6 +62,7 @@ public class TestRestInterfaceTrabajo {
 		crearRevsiones(1,1);
 		comprobarUsuarioyTrabajoReview(1,1);
 		findTrabajosByUsuario(1);
+		updateUsuario();
 //		crearRevsiones(2,5);
 //		crearRevsiones(3,6);
 	}
@@ -246,6 +247,31 @@ public class TestRestInterfaceTrabajo {
 
 		System.out.println("\nGET "+url);
 
+		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+		String resultContent = getResultContent(response);
+
+		System.out.println("Response Content : " + resultContent);
+
+	}
+	
+	public void updateUsuario() throws ClientProtocolException, IOException {
+
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode jsonObject = mapper.createObjectNode();
+		jsonObject.put("nombre", "Pepe");
+		jsonObject.put("apellido", "Pepino");
+		jsonObject.put("lugarDeTrabajo", "Pepineria");
+		jsonObject.put("expert", false);
+		String jsonString = jsonObject.toString();
+
+		String url = BASE_URL + "/usuario/5";
+		HttpPut request = new HttpPut(url);
+		request.setEntity(new StringEntity(jsonString, ContentType.APPLICATION_JSON));
+		HttpResponse response = client.execute(request);
+
+		System.out.println("\nPUT "+url);
+		
 		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
 		String resultContent = getResultContent(response);
