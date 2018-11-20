@@ -41,6 +41,11 @@ public class UsuarioRestController {
 		}
 	}
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Usuario> getUsuarioById() {
+		return UsuarioDAO.getInstance().findAll();
+	}
+	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Usuario getUsuarioById(@PathParam("id") String msg) {

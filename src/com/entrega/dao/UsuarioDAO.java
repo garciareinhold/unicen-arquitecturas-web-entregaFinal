@@ -52,11 +52,9 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 		EntityManager entityManager= EMF.createEntityManager();
 
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createQuery("SELECT u FROM usuario u", Usuario.class);
+		Query query = entityManager.createQuery("SELECT u FROM Usuario u");
 		entityManager.getTransaction().commit();
 		List<Usuario> usuarios = query.getResultList();
-		entityManager.close();
-
 		return usuarios;
 	}
 
@@ -96,10 +94,8 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 	public List<Trabajo> findTrabajosByUser(Integer id ) {
 		EntityManager entityManager= EMF.createEntityManager();
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery(
-				"SELECT t.* FROM trabajo_usuario u JOIN trabajo t ON (u.trabajos_id=t.id) WHERE u.autores_dni=:id",
-				Trabajo.class);
-		String jpql="SELECT t FROM trabajo_usuario u JOIN trabajo t ON u.trabajos_id=t.id WHERE u.autores_dni=:id";
+		String jpql="SELECT t FROM Usuario u INNER JOIN u.trabajos t WHERE u.id=:id";
+		Query query = entityManager.createQuery(jpql);
 		query.setParameter("id", id);
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
@@ -125,17 +121,19 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 
 		return revisiones;
 	}
-
-	public List<Trabajo> findTrabajosAutores(Integer id, EntityManager entityManager) {
-		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery(
-				"SELECT t.* FROM trabajo t JOIN usuario_trabajo u on(u.trabajos_id=t.id) WHERE autores_dni= :autId",
-				Trabajo.class);
-		query.setParameter("autId", id);
-		entityManager.getTransaction().commit();
-		List<Trabajo> revisiones = query.getResultList();
-		return revisiones;
-	}
+	
+	
+//	este metodo hace lo mismo que el findTrabajosByUser???
+//	public List<Trabajo> findTrabajosAutores(Integer id, EntityManager entityManager) {
+//		entityManager.getTransaction().begin();
+//		Query query = entityManager.createNativeQuery(
+//				"SELECT t.* FROM trabajo t JOIN usuario_trabajo u on(u.trabajos_id=t.id) WHERE autores_dni= :autId",
+//				Trabajo.class);
+//		query.setParameter("autId", id);
+//		entityManager.getTransaction().commit();
+//		List<Trabajo> revisiones = query.getResultList();
+//		return revisiones;
+//	}
 
 	public Usuario update(Integer id, Usuario newEntityValues, EntityManager entityManager) {
 		return null;

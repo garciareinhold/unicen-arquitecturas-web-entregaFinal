@@ -1,5 +1,7 @@
 package com.entrega.controllers;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,7 +15,9 @@ import javax.ws.rs.core.Response;
 import com.entrega.controllers.TemaRestController.RecursoDuplicado;
 import com.entrega.controllers.TemaRestController.RecursoNoExistente;
 import com.entrega.dao.RevisionDAO;
+import com.entrega.dao.UsuarioDAO;
 import com.entrega.entidades.Revision;
+import com.entrega.entidades.Usuario;
 
 @Path("/revision") 
 public class RevisionRestController {
@@ -30,7 +34,11 @@ public class RevisionRestController {
 			return Response.status(201).entity(review).build();
 		}
 	}
-
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Revision> getUsuarioById() {
+		return RevisionDAO.getInstance().findAll();
+	}
 	public class RecursoDuplicado extends WebApplicationException {
 	     public RecursoDuplicado(int id) {
 	         super(Response.status(Response.Status.CONFLICT)

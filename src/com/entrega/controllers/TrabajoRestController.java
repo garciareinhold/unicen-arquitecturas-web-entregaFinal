@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.entrega.entidades.Trabajo;
+import com.entrega.controllers.UsuarioRestController.RecursoNoExiste;
 import com.entrega.dao.TrabajoDAO;
 
 @Path("/trabajos")
@@ -78,6 +79,18 @@ public class TrabajoRestController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateTrabajo(@PathParam("id") int id,Trabajo work) {
 		throw new UnsupportedOperationException();
+	}
+	
+	@GET
+	@Path("/{id}/trabajos/{tema}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Trabajo> getTrabajosTema(@PathParam("id") String msg, @PathParam("tema") String tema ) {
+		int id = Integer.valueOf(msg);
+		List <Trabajo> trabajo = TrabajoDAO.getInstance().findTrabajosReviewByUserAndTema(tema, id);
+		if(trabajo!=null) {
+			return trabajo;
+		}else
+			throw new RecursoNoExiste(id);
 	}
 	
 	public class RecursoDuplicado extends WebApplicationException {

@@ -92,7 +92,12 @@ public  class Trabajo {
 		boolean retorno = true;
 		List<Tema> temasTrabajo = this.getTemasConocimiento();
 		List<Tema> temasEvaluador = evaluador.getTemasConocimiento();
-
+		for (int i = 0; i < this.autores.size(); i++) {
+			if(this.autores.get(i).getId()==evaluador.getId()) {
+				System.out.println("/////////////////////********");
+				return false;
+			}
+		}
 		if (temasTrabajo.size() <= temasEvaluador.size()
 				&& (this.hayCupoRevision() && (evaluador.hayCupoTrabajo()))) {
 

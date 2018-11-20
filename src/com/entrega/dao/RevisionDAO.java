@@ -5,9 +5,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import com.entrega.controllers.EMF;
 import com.entrega.entidades.Revision;
+
 
 public class RevisionDAO implements DAO<Revision, Integer> {
 	private static RevisionDAO daoRevision;
@@ -41,7 +43,12 @@ public class RevisionDAO implements DAO<Revision, Integer> {
 	}
 
 	public List<Revision> findAll( ) {
-		throw new UnsupportedOperationException();
+		EntityManager entityManager= EMF.createEntityManager();
+		entityManager.getTransaction().begin();
+		Query query = entityManager.createQuery("SELECT r FROM Revision r");
+		entityManager.getTransaction().commit();
+		List<Revision> revisiones = query.getResultList();
+		return revisiones;
 	}
 
 	public boolean delete(Integer id) {

@@ -61,15 +61,18 @@ public class TestRestInterfaceTrabajo {
 		crearTrabajo(4,3,"Junit");
 		getTrabajo();
 		listarTrabajos();
-		crearRevsiones(1,1);
-		comprobarUsuarioyTrabajoReview(1,1);
+		crearRevsiones(1,6);
+		comprobarUsuarioyTrabajoReview(6,1);
 		findTrabajosByUsuario(1);
 		updateUsuario();
 		getRevisionesPorFecha();
 		getTrabajosRevisadosPorUsuario();
 		getTrabajosByUserAndTema();
-//		crearRevsiones(2,5);
-//		crearRevsiones(3,6);
+		getTrabajosReviewByUserAndTema();
+		getAllUser();
+		getAllReview();
+		//		crearRevsiones(2,5);
+		//		crearRevsiones(3,6);
 	}
 
 	public void crearTema(String name,boolean general) throws ClientProtocolException, IOException {
@@ -187,7 +190,7 @@ public class TestRestInterfaceTrabajo {
 			review.setTrabajo(work);
 			Calendar fechaRevision= new GregorianCalendar(2011, 0, 31);
 			review.setFechaRevision(fechaRevision);
-			
+
 			String jsonString = mapper.writeValueAsString(review);
 			HttpPost post = new HttpPost(url);
 			post.setEntity(new StringEntity(jsonString, ContentType.APPLICATION_JSON));
@@ -206,9 +209,8 @@ public class TestRestInterfaceTrabajo {
 		HttpGet request = new HttpGet(url);
 		HttpResponse response = client.execute(request);
 		String resultContent = getResultContent(response);
-		System.out.println("entre");
 		System.out.println(resultContent);
-		
+
 	}
 	private String getResultContent(HttpResponse response) throws IOException {
 		HttpEntity entity = response.getEntity();
@@ -225,6 +227,13 @@ public class TestRestInterfaceTrabajo {
 		}
 	}
 
+	/**
+	 * @param usuario
+	 * @param trabajo
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * comprobamos si efectivamente se genero la review y tanto el trabajo como el usuario contienen la misma
+	 */
 	public void comprobarUsuarioyTrabajoReview(int usuario,int trabajo) throws ClientProtocolException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		String trabajo1Url= BASE_URL + "/trabajos/"+trabajo;
@@ -259,7 +268,12 @@ public class TestRestInterfaceTrabajo {
 		System.out.println("Response Content : " + resultContent);
 
 	}
-	
+
+	/**
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * update de usuario
+	 */
 	public void updateUsuario() throws ClientProtocolException, IOException {
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -276,7 +290,7 @@ public class TestRestInterfaceTrabajo {
 		HttpResponse response = client.execute(request);
 
 		System.out.println("\nPUT "+url);
-		
+
 		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
 		String resultContent = getResultContent(response);
@@ -286,6 +300,11 @@ public class TestRestInterfaceTrabajo {
 	}
 
 
+	/**
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * traemos todos los trabajos
+	 */
 	public void listarTrabajos() throws ClientProtocolException, IOException {
 		System.out.println("entre en el metodo del test");
 
@@ -306,58 +325,134 @@ public class TestRestInterfaceTrabajo {
 		System.out.println("Response Content : " + resultContent);
 
 	}
-	
+
+	/**
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * traemos los trbajos revisados por un usuario
+	 */
+	/**
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	private void getTrabajosRevisadosPorUsuario()throws ClientProtocolException, IOException{
-		String url = BASE_URL + "/usuario/1/revisados";
+		String url = BASE_URL + "/usuario/6/revisados";
 
 		HttpGet request = new HttpGet(url);
 
 		HttpResponse response = client.execute(request);
 
 		System.out.println("\nGET "+url);
-		
+
 		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
 		String resultContent = getResultContent(response);
 
 		System.out.println("Response Content : " + resultContent);
 	}
-	
-private void getRevisionesPorFecha() throws ClientProtocolException, IOException {
-		
-		String url = BASE_URL + "/usuario/1/1992-01-01/2019-12-21";
+
+	/**
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * traemos revisiones de un usuario en rangos de fechas
+	 */
+	private void getRevisionesPorFecha() throws ClientProtocolException, IOException {
+
+		String url = BASE_URL + "/usuario/6/1992-01-01/2019-12-21";
 
 		HttpGet request = new HttpGet(url);
 
 		HttpResponse response = client.execute(request);
 
 		System.out.println("\nGET "+url);
-		
+
 		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
 		String resultContent = getResultContent(response);
 
 		System.out.println("Response Content : " + resultContent);
-		
+
 	}
 
-private void getTrabajosByUserAndTema() throws ClientProtocolException, IOException {
-	
-	String url = BASE_URL + "/usuario/2/trabajos/JavaScript";
+	/**
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * traemos trabajos por un usuario determinado y un tema
+	 */
+	private void getTrabajosByUserAndTema() throws ClientProtocolException, IOException {
 
-	HttpGet request = new HttpGet(url);
+		String url = BASE_URL + "/usuario/1/trabajos/JavaScript";
 
-	HttpResponse response = client.execute(request);
+		HttpGet request = new HttpGet(url);
 
-	System.out.println("\nGET "+url);
-	
-	System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+		HttpResponse response = client.execute(request);
 
-	String resultContent = getResultContent(response);
+		System.out.println("\nGET "+url);
 
-	System.out.println("Response Content : " + resultContent);
-	
-}
+		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+		String resultContent = getResultContent(response);
+
+		System.out.println("Response Content : " + resultContent);
+
+	}
+
+	/**
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * Este metodo trae los trabajos revisados por un usuario en un determinado tema
+	 */
+	private void getTrabajosReviewByUserAndTema() throws ClientProtocolException, IOException {
+
+		String url = BASE_URL + "/trabajos/6/trabajos/JavaScript";
+
+		HttpGet request = new HttpGet(url);
+
+		HttpResponse response = client.execute(request);
+
+		System.out.println("\nGET "+url);
+
+		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+		String resultContent = getResultContent(response);
+
+		System.out.println("Response Content : " + resultContent);
+
+	}
+	private void getAllUser() throws ClientProtocolException, IOException {
+
+		String url = BASE_URL + "/usuario";
+
+		HttpGet request = new HttpGet(url);
+
+		HttpResponse response = client.execute(request);
+
+		System.out.println("\nGET "+url);
+
+		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+		String resultContent = getResultContent(response);
+
+		System.out.println("Response Content : " + resultContent);
+
+	}
+	private void getAllReview() throws ClientProtocolException, IOException {
+
+		String url = BASE_URL + "/revision";
+
+		HttpGet request = new HttpGet(url);
+
+		HttpResponse response = client.execute(request);
+
+		System.out.println("\nGET "+url);
+
+		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+		String resultContent = getResultContent(response);
+
+		System.out.println("Response Content : " + resultContent);
+
+	}
 
 
 	//	public void updatePerro() throws ClientProtocolException, IOException {
