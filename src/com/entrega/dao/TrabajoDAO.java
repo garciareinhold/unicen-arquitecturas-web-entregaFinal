@@ -73,16 +73,15 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 		return null;
 	}
 
-	public List<Trabajo> findByUserTema(String nombre) {
+	public List<Trabajo> findTrabajosByUserAndTema(String nombre, int id) {
 		EntityManager entityManager= EMF.createEntityManager();
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery(
-				"SELECT t.* FROM `tema` te JOIN trabajo_tema tt ON te.id= tt.temasConocimiento_id JOIN trabajo t ON tt.Trabajo_id = t.id WHERE te.name= :name",
-				Trabajo.class);
+		Query query = entityManager.createQuery("SELECT t FROM Usuario u JOIN u.trabajos t JOIN t.temasConocimiento tc  WHERE u.id= :userId AND tc.name= :name");
 		query.setParameter("name", nombre);
+		query.setParameter("userId", id);
+
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
-		entityManager.close();
 		return trabajos;
 	}
 }

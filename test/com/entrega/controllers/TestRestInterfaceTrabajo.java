@@ -67,6 +67,7 @@ public class TestRestInterfaceTrabajo {
 		updateUsuario();
 		getRevisionesPorFecha();
 		getTrabajosRevisadosPorUsuario();
+		getTrabajosByUserAndTema();
 //		crearRevsiones(2,5);
 //		crearRevsiones(3,6);
 	}
@@ -339,6 +340,25 @@ private void getRevisionesPorFecha() throws ClientProtocolException, IOException
 		System.out.println("Response Content : " + resultContent);
 		
 	}
+
+private void getTrabajosByUserAndTema() throws ClientProtocolException, IOException {
+	
+	String url = BASE_URL + "/usuario/2/trabajos/JavaScript";
+
+	HttpGet request = new HttpGet(url);
+
+	HttpResponse response = client.execute(request);
+
+	System.out.println("\nGET "+url);
+	
+	System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+	String resultContent = getResultContent(response);
+
+	System.out.println("Response Content : " + resultContent);
+	
+}
+
 
 	//	public void updatePerro() throws ClientProtocolException, IOException {
 	//

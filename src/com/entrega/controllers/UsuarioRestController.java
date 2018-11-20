@@ -19,7 +19,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
+import com.entrega.dao.TrabajoDAO;
 import com.entrega.dao.UsuarioDAO;
 import com.entrega.entidades.Revision;
 import com.entrega.entidades.Trabajo;
@@ -60,6 +60,18 @@ public class UsuarioRestController {
 		int id = Integer.valueOf(msg);
 		System.out.println("getTrabajosRvisados");
 		List <Trabajo> trabajo = UsuarioDAO.getInstance().findTrabajos(id);
+		if(trabajo!=null) {
+			return trabajo;
+		}else
+			throw new RecursoNoExiste(id);
+	}
+	
+	@GET
+	@Path("/{id}/trabajos/{tema}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Trabajo> getTrabajosTema(@PathParam("id") String msg, @PathParam("tema") String tema ) {
+		int id = Integer.valueOf(msg);
+		List <Trabajo> trabajo = TrabajoDAO.getInstance().findTrabajosByUserAndTema(tema, id);
 		if(trabajo!=null) {
 			return trabajo;
 		}else
