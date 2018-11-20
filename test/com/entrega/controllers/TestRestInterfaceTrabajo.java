@@ -307,7 +307,7 @@ public class TestRestInterfaceTrabajo {
 	}
 	
 	private void getTrabajosRevisadosPorUsuario()throws ClientProtocolException, IOException{
-		String url = BASE_URL + "/usuario/revisados/1";
+		String url = BASE_URL + "/usuario/1/revisados";
 
 		HttpGet request = new HttpGet(url);
 

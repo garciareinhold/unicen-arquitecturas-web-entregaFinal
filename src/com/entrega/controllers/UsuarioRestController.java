@@ -54,7 +54,7 @@ public class UsuarioRestController {
 	
 	
 	@GET
-	@Path("/revisados/{id}")
+	@Path("/{id}/revisados")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Trabajo> getTrabajosRevisados(@PathParam("id") String msg) {
 		int id = Integer.valueOf(msg);

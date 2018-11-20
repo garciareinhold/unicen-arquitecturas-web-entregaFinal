@@ -34,7 +34,8 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 	public Trabajo findByNombre(String nombre ) {
 		EntityManager entityManager= EMF.createEntityManager();
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery("SELECT * FROM trabajo WHERE nombre= :name", Trabajo.class);
+//		Query query = entityManager.createNativeQuery("SELECT * FROM trabajo WHERE nombre= :name", Trabajo.class);
+		Query query = entityManager.createQuery("SELECT t FROM Trabajo WHERE t.nombre = :name");
 		query.setParameter("name", nombre);
 		entityManager.getTransaction().commit();
 		Trabajo work = (Trabajo) query.getSingleResult();
@@ -56,10 +57,9 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 	public List<Trabajo> findAll() {
 		EntityManager entityManager= EMF.createEntityManager();
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery("SELECT * FROM trabajo", Trabajo.class);
+		Query query = entityManager.createQuery("SELECT t FROM Trabajo t");
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
-//		entityManager.close();
 		return trabajos;
 	}
 

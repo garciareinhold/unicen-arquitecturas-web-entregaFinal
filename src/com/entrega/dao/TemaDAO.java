@@ -42,9 +42,7 @@ public class TemaDAO implements DAO<Tema, Integer> {
 		Tema retorno;
 		EntityManager entityManager= EMF.createEntityManager();
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery(
-				"SELECT * FROM `tema` WHERE name=:name",
-				Tema.class);
+		Query query = entityManager.createQuery("SELECT t FROM Tema t WHERE t.name= :name");
 		query.setParameter("name", nombre);
 		entityManager.getTransaction().commit();
 		retorno =(Tema)query.getSingleResult();
