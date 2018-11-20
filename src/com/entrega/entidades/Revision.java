@@ -21,7 +21,7 @@ public class Revision {
 	int id;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
-	@JoinColumn(name="evaludor_dni")
+	@JoinColumn(name="evaluador_dni")
 	@JsonIgnoreProperties(value= {"review","trabajos"}, allowSetters=true)
 	Usuario evaluador;
 	

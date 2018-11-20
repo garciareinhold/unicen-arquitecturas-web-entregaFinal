@@ -52,7 +52,6 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 		EntityManager entityManager= EMF.createEntityManager();
 
 		entityManager.getTransaction().begin();
-//		Query query = entityManager.createNativeQuery("SELECT * FROM usuario", Usuario.class);
 		Query query = entityManager.createQuery("SELECT u FROM usuario u", Usuario.class);
 		entityManager.getTransaction().commit();
 		List<Usuario> usuarios = query.getResultList();
@@ -76,21 +75,23 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 		}
 
 	}
-
+	
+	
 	public List<Trabajo> findTrabajos(Integer id ) {
+//	 * Se obtienen todos los trabajos asignados a un Revisor
 		EntityManager entityManager= EMF.createEntityManager();
 
-		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery(
-				"SELECT t.* FROM revision r Join trabajo t on(r.trabajo_id=t.id and r.evaluador_dni = :revId)",
-				Trabajo.class);
-//		Query query = entityManager.createQuery
-		query.setParameter("revId", id);
-		entityManager.getTransaction().commit();
-		List<Trabajo> trabajos = query.getResultList();
-		entityManager.close();
+			List<Trabajo> trabajos= new ArrayList<Trabajo>();
+			entityManager.getTransaction().begin();
+//			Query query = entityManager.createNativeQuery(
+//					"SELECT t.* FROM revision r Join trabajo t on(r.trabajo_id=t.id and r.evaluador_dni = :revId)",
+//					Trabajo.class);
+			Query query = entityManager.createQuery("SELECT t FROM Revision r JOIN Trabajo t ON t.id=r.trabajo WHERE r.evaluador.id= :revId");
+			query.setParameter("revId", id);
+			entityManager.getTransaction().commit();
+			trabajos = query.getResultList();
+			return trabajos;
 
-		return trabajos;
 	}
 	public List<Trabajo> findTrabajosByUser(Integer id ) {
 		EntityManager entityManager= EMF.createEntityManager();

@@ -52,6 +52,21 @@ public class UsuarioRestController {
 			throw new RecursoNoExiste(id);
 	}
 	
+	
+	@GET
+	@Path("/revisados/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Trabajo> getTrabajosRevisados(@PathParam("id") String msg) {
+		int id = Integer.valueOf(msg);
+		System.out.println("getTrabajosRvisados");
+		List <Trabajo> trabajo = UsuarioDAO.getInstance().findTrabajos(id);
+		if(trabajo!=null) {
+			return trabajo;
+		}else
+			throw new RecursoNoExiste(id);
+	}
+	
+	
 	@PUT
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)

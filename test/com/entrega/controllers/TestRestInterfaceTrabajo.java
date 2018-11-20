@@ -66,6 +66,7 @@ public class TestRestInterfaceTrabajo {
 		findTrabajosByUsuario(1);
 		updateUsuario();
 		getRevisionesPorFecha();
+		getTrabajosRevisadosPorUsuario();
 //		crearRevsiones(2,5);
 //		crearRevsiones(3,6);
 	}
@@ -303,6 +304,22 @@ public class TestRestInterfaceTrabajo {
 
 		System.out.println("Response Content : " + resultContent);
 
+	}
+	
+	private void getTrabajosRevisadosPorUsuario()throws ClientProtocolException, IOException{
+		String url = BASE_URL + "/usuario/revisados/1";
+
+		HttpGet request = new HttpGet(url);
+
+		HttpResponse response = client.execute(request);
+
+		System.out.println("\nGET "+url);
+		
+		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+		String resultContent = getResultContent(response);
+
+		System.out.println("Response Content : " + resultContent);
 	}
 	
 private void getRevisionesPorFecha() throws ClientProtocolException, IOException {
