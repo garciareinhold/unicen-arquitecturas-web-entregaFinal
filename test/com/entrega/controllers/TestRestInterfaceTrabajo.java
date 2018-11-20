@@ -65,6 +65,7 @@ public class TestRestInterfaceTrabajo {
 		comprobarUsuarioyTrabajoReview(1,1);
 		findTrabajosByUsuario(1);
 		updateUsuario();
+		getRevisionesPorFecha();
 //		crearRevsiones(2,5);
 //		crearRevsiones(3,6);
 	}
@@ -304,23 +305,23 @@ public class TestRestInterfaceTrabajo {
 
 	}
 	
-//private void getRevisionesPorFecha() throws ClientProtocolException, IOException {
-//		
-//		String url = BASE_URL + "/usuario/findRevisiones?from=&to=";
-//
-//		HttpGet request = new HttpGet(url);
-//
-//		HttpResponse response = client.execute(request);
-//
-//		System.out.println("\nGET "+url);
-//		
-//		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
-//
-//		String resultContent = getResultContent(response);
-//
-//		System.out.println("Response Content : " + resultContent);
-//		
-//	}
+private void getRevisionesPorFecha() throws ClientProtocolException, IOException {
+		
+		String url = BASE_URL + "/usuario/1/1992-01-01/2019-12-21";
+
+		HttpGet request = new HttpGet(url);
+
+		HttpResponse response = client.execute(request);
+
+		System.out.println("\nGET "+url);
+		
+		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
+
+		String resultContent = getResultContent(response);
+
+		System.out.println("Response Content : " + resultContent);
+		
+	}
 
 	//	public void updatePerro() throws ClientProtocolException, IOException {
 	//

@@ -1,6 +1,10 @@
 package com.entrega.controllers;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -90,22 +94,41 @@ public class UsuarioRestController {
 	}
 	
 	
-//	@GET
-//	@Path("/findRevisiones")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public List<Revision> findPerrosByEdad(@QueryParam("id") String msg, @QueryParam("from") Calendar from,
-//			@QueryParam("to") Calendar to) {
-//		int id = Integer.valueOf(msg);
-//		Calendar dateFrom  = from;
-//		Calendar dateTo  = to;
-//
-//		List<Revision>revisiones = UsuarioDAO.getInstance().findRevisiones(id, dateFrom, dateTo);
-//		if(revisiones!=null) {
-//			System.out.println(revisiones);
-//			return revisiones;
-//			
-//		}else
-//			throw new RecursoNoExiste(id);
-//	}
+	@GET
+	@Path("/{id}/{from}/{to}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Revision> findPerrosByEdad(@PathParam("id") String msg, @PathParam("from") String dateFrom,
+			@PathParam("to") String dateTo) {
+		
+		int idUser = Integer.valueOf(msg);
+		Calendar calendarFrom;
+		Calendar calendarTo;
+		calendarTo = Calendar.getInstance();
+		calendarFrom= Calendar.getInstance();
+
+		System.out.println(idUser);
+		System.out.println(dateFrom);
+		System.out.println(dateTo);
+
+		try {
+			java.util.Date fechaTo= new SimpleDateFormat("yyyy-MM-dd").parse(dateTo);
+			java.util.Date fechaFrom=new SimpleDateFormat("yyyy-MM-dd").parse(dateFrom);
+			calendarTo.setTime(fechaTo);
+			calendarFrom.setTime(fechaFrom); 
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(calendarFrom);
+		System.out.println(calendarTo);
+
+		List<Revision>revisiones = UsuarioDAO.getInstance().findRevisiones(idUser, calendarFrom, calendarTo);
+		if(revisiones!=null) {
+			System.out.println(revisiones);
+			return revisiones;
+			
+		}else
+			throw new RecursoNoExiste(idUser);
+	}
 
 }

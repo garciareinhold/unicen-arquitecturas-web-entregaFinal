@@ -52,7 +52,8 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 		EntityManager entityManager= EMF.createEntityManager();
 
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery("SELECT * FROM usuario", Usuario.class);
+//		Query query = entityManager.createNativeQuery("SELECT * FROM usuario", Usuario.class);
+		Query query = entityManager.createQuery("SELECT u FROM usuario u", Usuario.class);
 		entityManager.getTransaction().commit();
 		List<Usuario> usuarios = query.getResultList();
 		entityManager.close();
@@ -83,6 +84,7 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 		Query query = entityManager.createNativeQuery(
 				"SELECT t.* FROM revision r Join trabajo t on(r.trabajo_id=t.id and r.evaluador_dni = :revId)",
 				Trabajo.class);
+//		Query query = entityManager.createQuery
 		query.setParameter("revId", id);
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
@@ -107,16 +109,18 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 	public List<Revision> findRevisiones(Integer id, Calendar desde, Calendar hasta) {
 		EntityManager entityManager= EMF.createEntityManager();
 
+		System.out.println(id);
+		System.out.println(desde);
+		System.out.println(hasta);
+
 		entityManager.getTransaction().begin();
-		Query query = entityManager.createNativeQuery(
-				"SELECT * FROM revision WHERE evaluador_dni= :evalId and fechaRevision BETWEEN :desde and :hasta",
-				Revision.class);
+	
+		Query query = entityManager.createQuery("SELECT r FROM Revision r WHERE r.evaluador.id= :evalId AND r.fechaRevision BETWEEN :desde AND :hasta");
 		query.setParameter("evalId", id);
 		query.setParameter("desde", desde);
 		query.setParameter("hasta", hasta);
 		entityManager.getTransaction().commit();
 		List<Revision> revisiones = query.getResultList();
-		entityManager.close();
 
 		return revisiones;
 	}
