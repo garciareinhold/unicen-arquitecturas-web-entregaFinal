@@ -28,6 +28,7 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 	public Trabajo findById(Integer id) {
 		EntityManager entityManager= EMF.createEntityManager();
 		Trabajo work = entityManager.find(Trabajo.class, id);
+		entityManager.close();
 		return work;
 	}
 
@@ -60,6 +61,7 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 		Query query = entityManager.createQuery("SELECT t FROM Trabajo t");
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
+		entityManager.close();
 		return trabajos;
 	}
 
@@ -82,6 +84,7 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
+		entityManager.close();
 		return trabajos;
 	}
 	public List<Trabajo> findTrabajosReviewByUserAndTema(String nombre, int id) {
@@ -93,6 +96,7 @@ public class TrabajoDAO implements DAO<Trabajo, Integer> {
 
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
+		entityManager.close();
 		return trabajos;
 	}
 }

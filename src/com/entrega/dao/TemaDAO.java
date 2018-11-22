@@ -7,6 +7,7 @@ import javax.persistence.Query;
 
 import com.entrega.controllers.EMF;
 import com.entrega.entidades.Tema;
+import com.entrega.entidades.Usuario;
 
 
 
@@ -65,8 +66,14 @@ public class TemaDAO implements DAO<Tema, Integer> {
 
 	@Override
 	public List<Tema> findAll( ) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager= EMF.createEntityManager();
+
+		entityManager.getTransaction().begin();
+		Query query = entityManager.createQuery("SELECT t FROM Tema t");
+		entityManager.getTransaction().commit();
+		List<Tema> temas = query.getResultList();
+		entityManager.close();
+		return temas;
 	}
 
 	@Override

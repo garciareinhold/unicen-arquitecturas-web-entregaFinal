@@ -1,5 +1,7 @@
 package com.entrega.controllers;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,7 +14,9 @@ import javax.ws.rs.core.Response;
 
 
 import com.entrega.dao.TemaDAO;
+import com.entrega.dao.UsuarioDAO;
 import com.entrega.entidades.Tema;
+import com.entrega.entidades.Usuario;
 
 @Path("/tema")
 public class TemaRestController {
@@ -28,6 +32,12 @@ public class TemaRestController {
 		}else {
 			return Response.status(201).entity(tema).build();
 		}
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Tema> getUsuarioById() {
+		return TemaDAO.getInstance().findAll();
 	}
 
 	@GET

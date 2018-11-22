@@ -88,18 +88,19 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 			query.setParameter("revId", id);
 			entityManager.getTransaction().commit();
 			trabajos = query.getResultList();
+			entityManager.close();
 			return trabajos;
 
 	}
 	public List<Trabajo> findTrabajosByUser(Integer id ) {
 		EntityManager entityManager= EMF.createEntityManager();
 		entityManager.getTransaction().begin();
-		String jpql="SELECT t FROM Usuario u INNER JOIN u.trabajos t WHERE u.id=:id";
+		String jpql="SELECT t FROM Usuario u JOIN u.trabajos t WHERE u.id=:id";
 		Query query = entityManager.createQuery(jpql);
 		query.setParameter("id", id);
 		entityManager.getTransaction().commit();
 		List<Trabajo> trabajos = query.getResultList();
-		System.out.println("entre "+trabajos);
+		entityManager.close();
 		return trabajos;
 	}
 

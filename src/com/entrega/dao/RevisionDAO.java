@@ -48,6 +48,7 @@ public class RevisionDAO implements DAO<Revision, Integer> {
 		Query query = entityManager.createQuery("SELECT r FROM Revision r");
 		entityManager.getTransaction().commit();
 		List<Revision> revisiones = query.getResultList();
+		entityManager.close();
 		return revisiones;
 	}
 
