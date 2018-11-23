@@ -25,6 +25,8 @@ import com.entrega.entidades.Revision;
 import com.entrega.entidades.Tema;
 import com.entrega.entidades.Trabajo;
 import com.entrega.entidades.Usuario;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -171,12 +173,9 @@ public class SistemaCacic {
 		HttpGet request = new HttpGet(url);
 		HttpResponse response = client.execute(request);
 		String resultContent = getResultContent(response);
-		System.out.println("trabajos de un usuario");
-		System.out.println(resultContent);
-		ObjectMapper mapper = new ObjectMapper();
-		List <Trabajo> trabajos=mapper.readValue(resultContent, mapper.getTypeFactory().constructCollectionType(
-                ArrayList.class, Trabajo.class));
-		return trabajos;
+
+		
+		return readResult(resultContent);
 
 	}
 	
@@ -205,9 +204,9 @@ public class SistemaCacic {
 		System.out.println("hice los assert");
 	}
 	
-	public static void getTrabajo() throws ClientProtocolException, IOException {
+	public static Trabajo getTrabajo(int id) throws ClientProtocolException, IOException {
 
-		String url = BASE_URL + "/trabajos/1";
+		String url = BASE_URL + "/trabajos/"+id;
 
 		HttpGet request = new HttpGet(url);
 
@@ -220,6 +219,12 @@ public class SistemaCacic {
 		String resultContent = getResultContent(response);
 
 		System.out.println("Response Content : " + resultContent);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		return mapper.readValue(resultContent, Trabajo.class);
+		
+	
 
 	}
 	
@@ -228,17 +233,16 @@ public class SistemaCacic {
 	 * @throws IOException
 	 * update de usuario
 	 */
-	public static void updateUsuario() throws ClientProtocolException, IOException {
+	public static Usuario updateUsuario(int id,String name,String apellido,String lugarDeTrabajo) throws ClientProtocolException, IOException {
 
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode jsonObject = mapper.createObjectNode();
-		jsonObject.put("nombre", "Pepe");
-		jsonObject.put("apellido", "Pepino");
-		jsonObject.put("lugarDeTrabajo", "Pepineria");
-		jsonObject.put("expert", false);
+		jsonObject.put("nombre", name);
+		jsonObject.put("apellido", apellido);
+		jsonObject.put("lugarDeTrabajo", lugarDeTrabajo);
 		String jsonString = jsonObject.toString();
 
-		String url = BASE_URL + "/usuario/5";
+		String url = BASE_URL + "/usuario/"+id;
 		HttpPut request = new HttpPut(url);
 		request.setEntity(new StringEntity(jsonString, ContentType.APPLICATION_JSON));
 		HttpResponse response = client.execute(request);
@@ -250,6 +254,13 @@ public class SistemaCacic {
 		String resultContent = getResultContent(response);
 
 		System.out.println("Response Content : " + resultContent);
+		
+		String userUrl= BASE_URL + "/usuario/"+id;
+		HttpGet request3 = new HttpGet(userUrl);
+		HttpResponse response1 = client.execute(request3);
+		String resultContent1 = getResultContent(response1);
+		
+		return mapper.readValue(resultContent1, Usuario.class);
 
 	}
 	
@@ -277,11 +288,7 @@ public class SistemaCacic {
 
 		System.out.println("Response Content : " + resultContent);
 		
-		ObjectMapper mapper = new ObjectMapper();
-		List <Trabajo> trabajos=mapper.readValue(resultContent, mapper.getTypeFactory().constructCollectionType(
-                ArrayList.class, Trabajo.class));
-
-		return trabajos;
+		return readResult(resultContent);
 
 	}
 	
@@ -294,8 +301,8 @@ public class SistemaCacic {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public static void getTrabajosRevisadosPorUsuario()throws ClientProtocolException, IOException{
-		String url = BASE_URL + "/usuario/9/revisados";
+	public static List<Trabajo> getTrabajosRevisadosPorUsuario(int id)throws ClientProtocolException, IOException{
+		String url = BASE_URL + "/usuario/"+id+"/revisados";
 
 		HttpGet request = new HttpGet(url);
 
@@ -309,6 +316,12 @@ public class SistemaCacic {
 
 		System.out.println("Response Content : " + resultContent);
 		
+		return readResult(resultContent);
+	}
+	
+	private static List<Trabajo> readResult(String resultContent) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(resultContent, mapper.getTypeFactory().constructCollectionType(ArrayList.class, Trabajo.class));
 	}
 	
 	/**
@@ -316,9 +329,9 @@ public class SistemaCacic {
 	 * @throws IOException
 	 * traemos revisiones de un usuario en rangos de fechas
 	 */
-	public static void getRevisionesPorFecha() throws ClientProtocolException, IOException {
+	public static List<Revision> getRevisionesPorFecha(int id,String desde,String hasta) throws ClientProtocolException, IOException {
 
-		String url = BASE_URL + "/usuario/9/1992-01-01/2019-12-21";
+		String url = BASE_URL + "/usuario/"+id+"/"+desde+"/"+hasta;
 
 		HttpGet request = new HttpGet(url);
 
@@ -331,18 +344,19 @@ public class SistemaCacic {
 		String resultContent = getResultContent(response);
 
 		System.out.println("Response Content : " + resultContent);
-		
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(resultContent, mapper.getTypeFactory().constructCollectionType(ArrayList.class, Revision.class));
 
 	}
 
 	/**
 	 * @throws ClientProtocolException
 	 * @throws IOException
-	 * traemos trabajos por un usuario determinado y un tema
+	 * traemos los trabajos por un usuario determinado y un tema
 	 */
-	public static void getTrabajosByUserAndTema() throws ClientProtocolException, IOException {
+	public static List<Trabajo> getTrabajosByUserAndTema(int id,String tema) throws ClientProtocolException, IOException {
 
-		String url = BASE_URL + "/usuario/9/trabajos/Eclipse";
+		String url = BASE_URL + "/usuario/"+id+"/trabajos/"+tema;
 
 		HttpGet request = new HttpGet(url);
 
@@ -355,7 +369,8 @@ public class SistemaCacic {
 		String resultContent = getResultContent(response);
 
 		System.out.println("Response Content : " + resultContent);
-		
+
+		return readResult(resultContent);
 
 	}
 
@@ -364,9 +379,9 @@ public class SistemaCacic {
 	 * @throws IOException
 	 * Este metodo trae los trabajos revisados por un usuario en un determinado tema
 	 */
-	public static void getTrabajosReviewByUserAndTema() throws ClientProtocolException, IOException {
+	public static List<Trabajo> getTrabajosReviewByUserAndTema(int id ,String tema) throws ClientProtocolException, IOException {
 
-		String url = BASE_URL + "/trabajos/9/trabajos/JavaScript";
+		String url = BASE_URL + "/trabajos/"+id+"/trabajos/"+tema;
 
 		HttpGet request = new HttpGet(url);
 
@@ -380,7 +395,7 @@ public class SistemaCacic {
 
 		System.out.println("Response Content : " + resultContent);
 		
-
+		return readResult(resultContent);
 	}
 	public static List<Usuario> getAllUser() throws ClientProtocolException, IOException {
 

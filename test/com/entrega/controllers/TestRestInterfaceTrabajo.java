@@ -1,6 +1,7 @@
 package com.entrega.controllers;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -25,7 +26,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.entrega.entidades.Revision;
 import com.entrega.entidades.Tema;
@@ -39,31 +42,29 @@ import main.SistemaCacic;
 
 
 
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestRestInterfaceTrabajo {
 
 	public final String BASE_URL="http://localhost:8080/EntregaArquitectura/api";
 
 	public final HttpClient client = HttpClientBuilder.create().build();
 
+//	@Test
+//	public void testRESTInterface() throws ClientProtocolException, IOException {
+//		crearTemas();
+//		crearUsuarios();
+//		crearTrabajos();
+//		getTrabajo();
+//		crearRevsiones();
+//		findTrabajosByUsuario(2);
+//		updateUsuario();
+//		getRevisionesPorFecha();
+//		getTrabajosRevisadosPorUsuario();
+//		getTrabajosByUserAndTema();
+//		getTrabajosReviewByUserAndTema();
+//	}
 	@Test
-	public void testRESTInterface() throws ClientProtocolException, IOException {
-		crearTemas();
-		crearUsuarios();
-		crearTrabajos();
-		getTrabajo();
-//		listarTrabajos();
-		crearRevsiones();
-//		comprobarUsuarioyTrabajoReview(6,1);
-		findTrabajosByUsuario(2);
-		updateUsuario();
-		getRevisionesPorFecha();
-		getTrabajosRevisadosPorUsuario();
-		getTrabajosByUserAndTema();
-		getTrabajosReviewByUserAndTema();
-	}
-
-	public void crearTemas() throws ClientProtocolException, IOException {
+	public void test01_crearTemas() throws ClientProtocolException, IOException {
 		SistemaCacic.crearTema("Java",true);
 		SistemaCacic.crearTema("JavaScript",false);
 		SistemaCacic.crearTema("Eclipse",true);
@@ -79,7 +80,8 @@ public class TestRestInterfaceTrabajo {
 		assertTrue(temas.size()==10);
 		SistemaCacic.resetClient();
 	}
-	public void crearUsuarios() throws ClientProtocolException, IOException {
+	@Test
+	public void test02_crearUsuarios() throws ClientProtocolException, IOException {
 		SistemaCacic.addParticipante(1,"Maximiliano","Guerra","Municipalidad de Tandil",1);
 		SistemaCacic.addParticipante(2,"Arturo","Garcia Reinhold","Infor",2);
 		SistemaCacic.addParticipante(3,"Carlos","Cabrera Gentille","Beereal",3);
@@ -96,7 +98,8 @@ public class TestRestInterfaceTrabajo {
 		SistemaCacic.resetClient();
 	
 	}
-	public void crearTrabajos() throws ClientProtocolException, IOException {
+	@Test
+	public void test03_crearTrabajos() throws ClientProtocolException, IOException {
 		SistemaCacic.crearTrabajo(1,1,"JavaScript");
 		SistemaCacic.crearTrabajo(2,2,"Desarrolo IA");
 		SistemaCacic.crearTrabajo(3,3,"Junit");
@@ -113,7 +116,8 @@ public class TestRestInterfaceTrabajo {
 		SistemaCacic.resetClient();
 
 	}
-	public void crearRevsiones()  throws ClientProtocolException, IOException {
+	@Test
+	public void test04_crearRevsiones()  throws ClientProtocolException, IOException {
 		SistemaCacic.crearRevsiones(1,9);
 		SistemaCacic.crearRevsiones(2,5);
 		SistemaCacic.crearRevsiones(3,4);
@@ -122,8 +126,10 @@ public class TestRestInterfaceTrabajo {
 		assertTrue(revisiones.size()==3);
 		SistemaCacic.resetClient();
 	}
-	public void findTrabajosByUsuario(int id)  throws ClientProtocolException, IOException {
+	@Test
+	public void test05_findTrabajosByUsuario()  throws ClientProtocolException, IOException {
 		SistemaCacic.resetClient();
+		int id=2;
 		List<Trabajo> trabajos=  SistemaCacic.findTrabajosByUsuario(id);
 		assertTrue(trabajos.size()==1);
 		SistemaCacic.resetClient();
@@ -140,8 +146,10 @@ public class TestRestInterfaceTrabajo {
 //	public void comprobarUsuarioyTrabajoReview(int usuario,int trabajo) throws ClientProtocolException, IOException {
 //		SistemaCacic.comprobarUsuarioyTrabajoReview(usuario, trabajo);
 //	}
-	public void getTrabajo() throws ClientProtocolException, IOException {
-		SistemaCacic.getTrabajo();
+	@Test
+	public void test06_getTrabajo() throws ClientProtocolException, IOException {
+		Trabajo work=SistemaCacic.getTrabajo(1);
+		assertEquals(work.getNombre(),"JavaScript");
 		SistemaCacic.resetClient();
 	}
 
@@ -150,9 +158,14 @@ public class TestRestInterfaceTrabajo {
 	 * @throws IOException
 	 * update de usuario
 	 */
-	public void updateUsuario() throws ClientProtocolException, IOException {
+	@Test
+	public void test10_updateUsuario() throws ClientProtocolException, IOException {
 
-		SistemaCacic.updateUsuario();
+		Usuario user=SistemaCacic.updateUsuario(5,"Pepe","Argento","Renault");
+		assertEquals(user.getNombre(), "Pepe");
+		assertEquals(user.getApellido(), "Argento");
+		assertEquals(user.getLugarDeTrabajo(), "Renault");
+		assertTrue(user.getId()==5);
 		SistemaCacic.resetClient();
 	}
 	/**
@@ -164,8 +177,10 @@ public class TestRestInterfaceTrabajo {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	private void getTrabajosRevisadosPorUsuario()throws ClientProtocolException, IOException{
-		SistemaCacic.getTrabajosRevisadosPorUsuario();
+	@Test
+	public void test08_getTrabajosRevisadosPorUsuario()throws ClientProtocolException, IOException{
+		List<Trabajo>trabajos=SistemaCacic.getTrabajosRevisadosPorUsuario(5);
+		assertTrue(trabajos.size()==1);
 		SistemaCacic.resetClient();
 	}
 
@@ -174,9 +189,11 @@ public class TestRestInterfaceTrabajo {
 	 * @throws IOException
 	 * traemos revisiones de un usuario en rangos de fechas
 	 */
-	private void getRevisionesPorFecha() throws ClientProtocolException, IOException {
+	@Test
+	public void test07_getRevisionesPorFecha() throws ClientProtocolException, IOException {
 
-		SistemaCacic.getRevisionesPorFecha();
+		List<Revision>revisiones= SistemaCacic.getRevisionesPorFecha(9,"1992-01-01","2019-12-21");
+		assertTrue(revisiones.size()==1);
 		SistemaCacic.resetClient();
 	}
 
@@ -185,9 +202,11 @@ public class TestRestInterfaceTrabajo {
 	 * @throws IOException
 	 * traemos trabajos por un usuario determinado y un tema
 	 */
-	private void getTrabajosByUserAndTema() throws ClientProtocolException, IOException {
+	@Test
+	public void test07_getTrabajosByUserAndTema() throws ClientProtocolException, IOException {
 
-		SistemaCacic.getTrabajosByUserAndTema();
+		List<Trabajo> trabajos= SistemaCacic.getTrabajosByUserAndTema(9,"Eclipse");
+		assertTrue(trabajos.size()==1);
 		SistemaCacic.resetClient();
 
 	}
@@ -197,8 +216,10 @@ public class TestRestInterfaceTrabajo {
 	 * @throws IOException
 	 * Este metodo trae los trabajos revisados por un usuario en un determinado tema
 	 */
-	private void getTrabajosReviewByUserAndTema() throws ClientProtocolException, IOException {
-		SistemaCacic.getTrabajosReviewByUserAndTema();
+	@Test
+	public void test11_getTrabajosReviewByUserAndTema() throws ClientProtocolException, IOException {
+		List<Trabajo> trabajos=SistemaCacic.getTrabajosReviewByUserAndTema(9,"JavaScript");
+		assertTrue(trabajos.size()==1);
 		SistemaCacic.resetClient();
 	}
 }

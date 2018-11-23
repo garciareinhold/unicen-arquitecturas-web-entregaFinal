@@ -150,7 +150,6 @@ public class UsuarioDAO implements DAO<Usuario, Integer> {
 			} else {
 				entityManager.getTransaction().begin();			
 				entityAux.setNombre(entity.getNombre());
-				entityAux.setExpert(entity.esExperto());
 				entityAux.setApellido(entity.getApellido());
 				entityAux.setLugarDeTrabajo(entity.getLugarDeTrabajo());
 				entityManager.getTransaction().commit();
