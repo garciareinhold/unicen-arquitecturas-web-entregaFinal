@@ -65,9 +65,9 @@ public class TestRestInterfaceTrabajo {
 //	}
 	@Test
 	public void test01_crearTemas() throws ClientProtocolException, IOException {
-		SistemaCacic.crearTema("Java",true);
+		SistemaCacic.crearTema("Java",false);
 		SistemaCacic.crearTema("JavaScript",false);
-		SistemaCacic.crearTema("Eclipse",true);
+		SistemaCacic.crearTema("Eclipse",false);
 		SistemaCacic.crearTema("Phyton",false);
 		SistemaCacic.crearTema("MongoDB",false);
 		SistemaCacic.crearTema("Nodejs",true);

@@ -208,7 +208,7 @@ public class Usuario {
 
 	public void addTemasConocimiento(Tema tema) {
 		this.temasConocimiento.add(tema);
-		if (this.expert == false && tema.isTemaGeneral() == false) {
+		if (this.expert == false && tema.isTemaGeneral() == true) {
 			this.expert = true;
 		}
 	}
